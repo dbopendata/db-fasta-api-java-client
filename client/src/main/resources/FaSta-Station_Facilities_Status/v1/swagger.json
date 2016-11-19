@@ -1,0 +1,523 @@
+{
+   "basePath":"/fasta/v1",
+   "paths":{
+      "/stations/{stationnumber}":{
+         "get":{
+            "x-auth-type":"Application & Application User",
+            "produces":[
+               "application/json"
+            ],
+            "description":"Returns information about the station and its facilities identified by a stationnumber.",
+            "operationId":"findStationByStationNumber",
+            "responses":{
+               "200":{
+                  "schema":{
+                     "$ref":"#/definitions/station"
+                  },
+                  "description":"station data"
+               },
+               "404":{
+                  "description":"The requested station could not be found."
+               },
+               "406":{
+                  "description":"Requested representation format is not available."
+               },
+               "500":{
+                  "description":"A processing error has occurred."
+               },
+               "503":{
+                  "description":"The service has been disabled temporarily."
+               }
+            },
+            "parameters":[
+               {
+                  "in":"path",
+                  "name":"stationnumber",
+                  "format":"int64",
+                  "description":"stationnumber of the station to fetch",
+                  "type":"integer",
+                  "minimum":1,
+                  "required":true
+               }
+            ],
+            "x-throttling-tier":"Unlimited"
+         }
+      },
+      "/disruptions":{
+         "get":{
+            "x-auth-type":"Application & Application User",
+            "produces":[
+               "application/json"
+            ],
+            "description":"Returns information about disruptions of facilities filtered by parameters.",
+            "operationId":"findDisruptions",
+            "responses":{
+               "200":{
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "$ref":"#/definitions/disruption"
+                     }
+                  },
+                  "description":"disruption data"
+               },
+               "400":{
+                  "description":"The given filters contained invalid values."
+               },
+               "406":{
+                  "description":"The requested representation format is not available."
+               },
+               "500":{
+                  "description":"A processing error has occurred."
+               },
+               "503":{
+                  "description":"The service has been disabled temporarily."
+               }
+            },
+            "parameters":[
+               {
+                  "default":[
+                     "ESCALATOR",
+                     "ELEVATOR"
+                  ],
+                  "in":"query",
+                  "uniqueItems":true,
+                  "name":"type",
+                  "description":"type of the facility to filter by",
+                  "type":"array",
+                  "items":{
+                     "type":"string",
+                     "enum":[
+                        "ESCALATOR",
+                        "ELEVATOR"
+                     ]
+                  },
+                  "collectionFormat":"csv",
+                  "required":false
+               },
+               {
+                  "in":"query",
+                  "name":"equipmentnumber",
+                  "format":"int64",
+                  "description":"equipmentnumber of the facility to fetch",
+                  "type":"integer",
+                  "minimum":1,
+                  "required":false
+               },
+               {
+                  "in":"query",
+                  "name":"stationnumber",
+                  "format":"int64",
+                  "description":"stationnumber of the station to fetch",
+                  "type":"integer",
+                  "minimum":1,
+                  "required":false
+               }
+            ],
+            "x-throttling-tier":"Unlimited"
+         }
+      },
+      "/facilities/{equipmentnumber}":{
+         "get":{
+            "x-auth-type":"Application & Application User",
+            "produces":[
+               "application/json"
+            ],
+            "description":"Returns the facility identified by its equipmentnumber",
+            "operationId":"getFacilityByEquipmentNumber",
+            "responses":{
+               "200":{
+                  "schema":{
+                     "$ref":"#/definitions/facility"
+                  },
+                  "description":"Facility data"
+               },
+               "404":{
+                  "description":"The requested facility could not be found."
+               },
+               "406":{
+                  "description":"The requested representation format is not available."
+               },
+               "500":{
+                  "description":"A processing error has occurred."
+               },
+               "503":{
+                  "description":"The service has been disabled temporarily."
+               }
+            },
+            "parameters":[
+               {
+                  "in":"path",
+                  "name":"equipmentnumber",
+                  "format":"int64",
+                  "description":"equipmentnumber of the facility to fetch",
+                  "type":"integer",
+                  "minimum":1,
+                  "required":true
+               }
+            ],
+            "x-throttling-tier":"Unlimited"
+         }
+      },
+      "/facilities":{
+         "get":{
+            "x-auth-type":"Application & Application User",
+            "produces":[
+               "application/json"
+            ],
+            "description":"Access to public facilities (escalators and elevators) in railway stations",
+            "operationId":"findFacilities",
+            "responses":{
+               "200":{
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "$ref":"#/definitions/facility"
+                     }
+                  },
+                  "description":"facility data"
+               },
+               "400":{
+                  "description":"The given filters contained invalid values."
+               },
+               "406":{
+                  "description":"The requested representation format is not available."
+               },
+               "500":{
+                  "description":"A processing error has occurred."
+               },
+               "503":{
+                  "description":"The service has been disabled temporarily."
+               }
+            },
+            "parameters":[
+               {
+                  "default":[
+                     "ESCALATOR",
+                     "ELEVATOR"
+                  ],
+                  "in":"query",
+                  "uniqueItems":true,
+                  "name":"type",
+                  "description":"type of the facility to filter by",
+                  "type":"array",
+                  "items":{
+                     "type":"string",
+                     "enum":[
+                        "ESCALATOR",
+                        "ELEVATOR"
+                     ]
+                  },
+                  "collectionFormat":"csv",
+                  "required":false
+               },
+               {
+                  "default":[
+                     "ACTIVE",
+                     "INACTIVE"
+                  ],
+                  "in":"query",
+                  "uniqueItems":true,
+                  "name":"state",
+                  "description":"the state of the facility to filter by",
+                  "type":"array",
+                  "items":{
+                     "type":"string",
+                     "enum":[
+                        "ACTIVE",
+                        "INACTIVE"
+                     ]
+                  },
+                  "collectionFormat":"csv",
+                  "required":false
+               },
+               {
+                  "in":"query",
+                  "uniqueItems":true,
+                  "name":"equipmentnumbers",
+                  "description":"equipmentnumbers of the facility to filter by",
+                  "type":"array",
+                  "items":{
+                     "maxItems":100,
+                     "format":"int64",
+                     "type":"integer"
+                  },
+                  "collectionFormat":"csv",
+                  "required":false
+               },
+               {
+                  "in":"query",
+                  "name":"stationnumber",
+                  "format":"int64",
+                  "description":"station number to filter by",
+                  "type":"integer",
+                  "minimum":1,
+                  "required":false
+               },
+               {
+                  "minItems":4,
+                  "maxItems":4,
+                  "in":"query",
+                  "uniqueItems":false,
+                  "name":"area",
+                  "description":"Geo coordinate rectangle in WGS84-format to filter by. Parameters must be 4 numbers exactly as follows: longitudeWest, latitudeSouth, longitudeEast, latitudeNorth.",
+                  "type":"array",
+                  "items":{
+                     "type":"string"
+                  },
+                  "collectionFormat":"csv",
+                  "required":false
+               }
+            ],
+            "x-throttling-tier":"Unlimited"
+         }
+      },
+      "/disruptions/{disruptionnumber}":{
+         "get":{
+            "x-auth-type":"Application & Application User",
+            "produces":[
+               "application/json"
+            ],
+            "description":"Returns information about a specific disruption of a facility",
+            "operationId":"findDisruptionByDisruptionNumber",
+            "responses":{
+               "200":{
+                  "schema":{
+                     "$ref":"#/definitions/disruption"
+                  },
+                  "description":"disruption data"
+               },
+               "404":{
+                  "description":"The requested disruption could not be found."
+               },
+               "406":{
+                  "description":"Requested representation format is not available."
+               },
+               "500":{
+                  "description":"A processing error has occurred."
+               },
+               "503":{
+                  "description":"The service has been disabled temporarily."
+               }
+            },
+            "parameters":[
+               {
+                  "in":"path",
+                  "name":"disruptionnumber",
+                  "format":"int64",
+                  "description":"disruptionnumber of the disruption to fetch",
+                  "type":"integer",
+                  "minimum":1,
+                  "required":true
+               }
+            ],
+            "x-throttling-tier":"Unlimited"
+         }
+      }
+   },
+   "host":"api.deutschebahn.com",
+   "produces":[
+      "application/json"
+   ],
+   "schemes":[
+      "https",
+      "http"
+   ],
+   "definitions":{
+      "disruption":{
+         "description":"A disruption contains information associated with a facility that is temporarily not available.",
+         "type":"object",
+         "required":[
+            "disruptionnumber",
+            "equipmentnumber",
+            "type",
+            "stationnumber"
+         ],
+         "properties":{
+            "equipmentnumber":{
+               "format":"int64",
+               "description":"Identifier of the related facility.",
+               "type":"integer"
+            },
+            "geographicCoordinates":{
+               "$ref":"#/definitions/point"
+            },
+            "disruptionnumber":{
+               "format":"int64",
+               "description":"Unique identifier.",
+               "type":"integer"
+            },
+            "description":{
+               "description":"The local conditions of the related facility.",
+               "type":"string"
+            },
+            "outOfServiceTo":{
+               "format":"date-time",
+               "description":"Time specification when the facility will be available again after planned maintenance work (formatted in ISO-1806).",
+               "type":"string"
+            },
+            "type":{
+               "description":"The type of the related facility e.g. escalator or elevator.",
+               "type":"string",
+               "enum":[
+                  "ESCALATOR",
+                  "ELEVATOR"
+               ]
+            },
+            "outOfServiceReason":{
+               "description":"Cause of the disruption.",
+               "type":"string"
+            },
+            "outOfServiceOn":{
+               "format":"date-time",
+               "description":"Time specification when the facility will not be available for planned maintenance work (formatted in ISO-1806).",
+               "type":"string"
+            },
+            "furtherDescription":{
+               "description":"Further information of the cause if available.",
+               "type":"string"
+            },
+            "plannedCompletion":{
+               "format":"date-time",
+               "description":"Time specification when the repair is planned to be finished (formatted in ISO-1806).",
+               "type":"string"
+            },
+            "lastUpdate":{
+               "format":"date-time",
+               "description":"Last time this disruption has been updated (formatted in ISO-1806).",
+               "type":"string"
+            },
+            "stationnumber":{
+               "format":"int64",
+               "description":"Station number of the related facility.",
+               "type":"integer"
+            },
+            "state":{
+               "description":"Actual operational status.",
+               "type":"string",
+               "enum":[
+                  "INACTIVE"
+               ]
+            }
+         }
+      },
+      "station":{
+         "type":"object",
+         "required":[
+            "stationnumber",
+            "name"
+         ],
+         "properties":{
+            "name":{
+               "description":"Name of the station.",
+               "type":"string"
+            },
+            "stationnumber":{
+               "format":"int64",
+               "description":"Unique identifier of the railway station.",
+               "type":"integer"
+            },
+            "facilities":{
+               "type":"array",
+               "items":{
+                  "$ref":"#/definitions/facility"
+               }
+            }
+         }
+      },
+      "facility":{
+         "description":"Currently a facility provided by this API is either a public elevator or escalator in a german railway station operated by Station&Service AG.",
+         "type":"object",
+         "required":[
+            "equipmentnumber",
+            "type",
+            "state",
+            "stationnumber"
+         ],
+         "properties":{
+            "equipmentnumber":{
+               "format":"int64",
+               "description":"Unique identifier of the facility.",
+               "type":"integer"
+            },
+            "geocoordY":{
+               "format":"double",
+               "description":"latitude component of geocoordinate in WGS84 format",
+               "type":"number"
+            },
+            "geocoordX":{
+               "format":"double",
+               "description":"longitude component of geocoordinate in WGS84 format",
+               "type":"number"
+            },
+            "description":{
+               "description":"The local conditions of the facility.",
+               "type":"string"
+            },
+            "stationnumber":{
+               "format":"int64",
+               "description":"Number of the station where the facility is located.",
+               "type":"integer"
+            },
+            "state":{
+               "description":"Actual operational status.",
+               "type":"string",
+               "enum":[
+                  "ACTIVE",
+                  "INACTIVE"
+               ]
+            },
+            "type":{
+               "description":"Facility type. Currently elevator or escalator.",
+               "type":"string",
+               "enum":[
+                  "ESCALATOR",
+                  "ELEVATOR"
+               ]
+            }
+         }
+      },
+      "point":{
+         "description":"Representation of a geographical point in GeoJSON format",
+         "type":"object",
+         "required":[
+            "type",
+            "coordinates"
+         ],
+         "properties":{
+            "coordinates":{
+               "minItems":2,
+               "maxItems":2,
+               "description":"An array of numbers. First value is longitude, second latitude.",
+               "type":"array",
+               "items":{
+                  "format":"double",
+                  "type":"number"
+               }
+            },
+            "type":{
+               "default":"Point",
+               "type":"string"
+            }
+         }
+      }
+   },
+   "swagger":"2.0",
+   "info":{
+      "license":{
+         "name":"CC-BY 4.0",
+         "url":"https://creativecommons.org/licenses/by/4.0/"
+      },
+      "contact":{
+         "name":"Michael Binzen",
+         "email":"michael.binzen@deutschebahn.com"
+      },
+      "description":"A RESTful webservice to retrieve data about the operational state of public elevators and escalators in german railway stations operated by DB Station&Service AG. \nNote: Production and sandbox environments use the same production backend server. ",
+      "termsOfService":"http://data.deutschebahn.com/nutzungsbedingungen.html",
+      "title":"FaSta-Station_Facilities_Status",
+      "version":"v1"
+   },
+   "consumes":[
+      "application/json"
+   ]
+}
