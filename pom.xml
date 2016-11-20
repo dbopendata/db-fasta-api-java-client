@@ -3,7 +3,7 @@
 	<groupId>org.hisrc.fasta</groupId>
 	<artifactId>fasta-project</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>DB FaSta API Java Client Project</name>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
