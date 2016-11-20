@@ -8,7 +8,7 @@ This is a very simple Java client generated from the [FaSta API specification](h
 * Subscribe for the FaSta API
 * Get your access token
 * Create an API instance:  
-```
+```java
 DefaultApi api = new DefaultApiFactory().createApi(accessToken);
 ```
 * Call operations:  
