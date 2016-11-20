@@ -10,12 +10,14 @@ This is a very simple Java client generated from the [FaSta API specification](h
 * Create an API instance:  
 ```
 DefaultApi api = new DefaultApiFactory().createApi(accessToken);
-List<Facility> facilities = api.findFacilities(null, null, null, null, null);
 ```
-* Call operations, for example:  
+* Call operations:  
 ```
-DefaultApi api = new DefaultApiFactory().createApi(accessToken);
-List<Facility> facilities = api.findFacilities(null, null, null, null, null);
+final List<Facility> inactiveElevatorFacilities = api.findFacilities(Arrays.asList("ELEVATOR"), Arrays.asList("INACTIVE"), null, null, null);
+Facility escalator_ZuGleis10_11_Berlin_Ostbahnhof = api.getFacilityByEquipmentNumber(10441811L);
+Station station_Berlin_Ostbahnhof = api.findStationByStationNumber(530L);
+List<Disruption> disruptions = api.findDisruptions(null, null, null);
+Disruption disruption = api.findDisruptionByDisruptionNumber(11694554L);
 ```
 
 # License
